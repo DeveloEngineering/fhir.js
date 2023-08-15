@@ -166,19 +166,21 @@ declare namespace fhirClient {
   function Create<T extends fhir4.DomainResource>(content: {
     resource: T;
   }): Promise<{ data: T }>;
+
   function Create(content: {
     type: "Binary";
     data: Buffer;
   }): Promise<{ data: fhir4.Binary }>;
+
   function Create<T extends fhir4.DomainResource>(content: {
-    type: ResourceName;
+    type: T["resourceType"];
     data: T;
   }): Promise<{ data: T }>;
 
-  function Read(content: {
-    type: ResourceName;
+  function Read<T extends fhir4.DomainResource>(content: {
+    type: T["resourceType"];
     id: string;
-  }): Promise<{ data: fhir4.DomainResource }>;
+  }): Promise<{ data: T }>;
 
   function Patch(content: {
     type: ResourceName;
@@ -194,16 +196,16 @@ declare namespace fhirClient {
     resource: T;
   }): Promise<{ data: T }>;
 
-  function Search(content: {
-    type: ResourceName;
+  function Search<T extends fhir4.DomainResource>(content: {
+    type: T["resourceType"];
     count?: number;
     query?: QueryOptions;
-  }): Promise<{ data: fhir4.Bundle }>;
+  }): Promise<{ data: fhir4.Bundle<T> }>;
 
-  function NextPage(content: {
-    type: ResourceName;
-    bundle: fhir4.Bundle;
-  }): Promise<{ data: fhir4.Bundle }>;
+  function NextPage<T extends fhir4.DomainResource>(content: {
+    type: T["resourceType"];
+    bundle: fhir4.Bundle<T>;
+  }): Promise<{ data: fhir4.Bundle<T> }>;
 
   export interface FhirClient {
     conformance: ClientFn;
