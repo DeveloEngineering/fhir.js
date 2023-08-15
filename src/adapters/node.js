@@ -12,7 +12,8 @@
     return def;
   };
 
-  var adapter = {
+  var adapter = function (handleNotOkResponse) {
+    return {
     defer: defer,
     http: function (args) {
       if (args.data && typeof args.data === "string") {
@@ -40,6 +41,14 @@
         body: args.body ? JSON.stringify(args.body) : undefined,
         headers: args.headers,
       }).then(function (response) {
+        if (!response.ok) {
+          if (handleNotOkResponse) {
+            return handleNotOkResponse(response);
+          }
+          throw new Error(
+            `HTTP error, status = ${response.status} ${response.statusText}`
+          );
+        }
         return response.text().then(function (body) {
           let parsedBody;
           try {
@@ -62,9 +71,10 @@
         });
       });
     },
+    }
   };
 
-  module.exports = function (config) {
-    return mkFhir(config, adapter);
+  module.exports = function (config, handleNotOkResponse) {
+    return mkFhir(config, adapter(handleNotOkResponse));
   };
 }).call(this);

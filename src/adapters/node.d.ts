@@ -7,7 +7,7 @@
 
 export = fhirClient;
 
-declare function fhirClient(cfg: any): fhirClient.FhirClient;
+declare function fhirClient(cfg: any, handleNotOkResponse?: (response: any)=> any): fhirClient.FhirClient;
 
 declare namespace fhirClient {
   export type ClientFn = (...args: any[]) => Promise<{ data: any }>;
