@@ -47,6 +47,7 @@
         var resourceTypeHxPath = resourceTypePath.slash("_history");
         var resourcePath = resourceTypePath.slash(":id || :resource.id");
         var resourceHxPath = resourcePath.slash("_history");
+        var resourceSubPath = resourcePath.slash(":subPath");
         var vreadPath =  resourcePath.slash(":versionId || :resource.meta.versionId");
         var metaTarget = BaseUrl.slash(":target.resourceType || :target.type").slash(":target.id").slash(':target.versionId');
 
@@ -63,6 +64,7 @@
             typeHistory: GET.and(resourceTypeHxPath).and($Paging).end(http),
             resourceHistory: GET.and(resourceHxPath).and($Paging).end(http),
             read: GET.and(pt.$WithPatient).and(resourcePath).end(http),
+	    getResourceSubPath: GET.and(pt.$WithPatient).and(resourceSubPath).end(http),
             vread: GET.and(vreadPath).end(http),
             "delete": DELETE.and(resourcePath).and(ReturnHeader).end(http),
             create: POST.and(resourceTypePath).and(ReturnHeader).end(http),
